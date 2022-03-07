@@ -1,9 +1,12 @@
 import { Fragment } from "react";
-import { getEventById, getFeaturedEvents } from "../../helpers/api-util";
+import Head from "next/head";
 
+import { getEventById, getFeaturedEvents } from "../../helpers/api-util";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
+import ErrorAlert from "../../components/ui/error-alert";
+import Comments from "../../components/input/comments";
 
 export default function EventDetailPage(props) {
   const event = props.selectedEvent;
@@ -11,13 +14,17 @@ export default function EventDetailPage(props) {
   if (!event) {
     return (
       <div className="center">
-        <p>Loading</p>
+        <p>Loading...</p>
       </div>
     );
   }
 
   return (
     <Fragment>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
@@ -28,6 +35,7 @@ export default function EventDetailPage(props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </Fragment>
   );
 }
